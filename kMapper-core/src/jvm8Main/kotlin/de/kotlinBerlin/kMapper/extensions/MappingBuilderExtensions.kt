@@ -1,3 +1,6 @@
+@file:Suppress("unused")
+@file:JvmName("MappingBuilderUtil")
+
 package de.kotlinBerlin.kMapper.extensions
 
 import de.kotlinBerlin.kMapper.*
