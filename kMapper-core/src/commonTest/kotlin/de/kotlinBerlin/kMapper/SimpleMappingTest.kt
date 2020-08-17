@@ -120,13 +120,13 @@ class SimpleMappingTest {
             lateinit var age: String
             lateinit var list: List<Int>
             lateinit var name2: String
-            val sub: Sub = Sub()
+            var sub: Sub? = null
         }
 
         val tempMapping = defineMapping<Source, Target> {
             defConstructor(::Target)
 
-            Source::sub[Sub::name] map (Target::sub[Sub::name])
+            Source::sub[Sub::name] map (Target::sub.initOnRead { Sub() }[Sub::name])
             Source::name2 map Target::name2
             Source::age.readAsString() map Target::age.readAsInt()
             Source::list.readConverted(tempListMapping) map Target::list
@@ -140,7 +140,7 @@ class SimpleMappingTest {
 
         val tempMappedTarget = tempMapping.map(tempSource)
 
-        assertEquals(tempSource.sub.name, tempMappedTarget.sub.name)
+        assertEquals(tempSource.sub.name, tempMappedTarget.sub?.name)
         assertEquals(tempSource.name2, tempMappedTarget.name2)
         assertEquals(tempSource.age.toString(), tempMappedTarget.age)
         assertEquals(2, tempMappedTarget.list.size)

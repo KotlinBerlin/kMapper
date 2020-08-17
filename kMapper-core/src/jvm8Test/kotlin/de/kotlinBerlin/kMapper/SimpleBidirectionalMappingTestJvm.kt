@@ -1,6 +1,7 @@
 package de.kotlinBerlin.kMapper
 
 import de.kotlinBerlin.kMapper.extensions.*
+import kotlin.properties.Delegates
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -123,6 +124,7 @@ class SimpleBidirectionalMappingTestJvm {
     }
 
     @ExperimentalStdlibApi
+    @DelegatedNotNullInit
     @Test
     fun testNestedMappings() {
         defineBidirectionalMapping<List<String>, List<Int>> {
@@ -136,16 +138,16 @@ class SimpleBidirectionalMappingTestJvm {
 
         class Source(val age: Int, val name2: String) {
             lateinit var list: List<String>
-            val sub: Sub = Sub()
+            var sub: Sub by Delegates.notNull()
         }
 
         class Target(val name2: String, val age: String) {
             lateinit var list: List<Int>
-            val sub: Sub = Sub()
+            var sub: Sub by Delegates.notNull()
         }
 
         val tempMapping = defineBidirectionalMapping<Source, Target> {
-            Source::sub[Sub::name] map (Target::sub[Sub::name])
+            Source::sub.initNotNullDelegatedOnRead()[Sub::name] map (Target::sub.initNotNullDelegatedOnRead()[Sub::name])
 
             withDefault {
                 detectSourcePrimaryConstructor()
@@ -154,6 +156,7 @@ class SimpleBidirectionalMappingTestJvm {
         }
 
         val tempSource = Source(10, "Nachname")
+        tempSource.sub = Sub()
         tempSource.sub.name = "Vorname"
         tempSource.list = arrayListOf("1", "2")
 

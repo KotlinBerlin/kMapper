@@ -97,6 +97,7 @@ class SimpleMappingTestJvm {
         assertEquals(tempNames.parts["secondName"], tempMappedTarget.name2)
     }
 
+    @DelegatedNotNullInit
     @ExperimentalStdlibApi
     @Test
     fun testNestedMappings() {
@@ -118,11 +119,11 @@ class SimpleMappingTestJvm {
 
         class Target(val name2: String, val age: String) {
             lateinit var list: List<Int>
-            val sub: Sub = Sub()
+            var sub: Sub by Delegates.notNull()
         }
 
         val tempMapping = defineMapping<Source, Target> {
-            Source::sub[Sub::name] map (Target::sub[Sub::name])
+            Source::sub[Sub::name] map (Target::sub.initNotNullDelegatedOnRead { Sub() }[Sub::name])
             withDefault {
                 detectPrimaryConstructor()
             }

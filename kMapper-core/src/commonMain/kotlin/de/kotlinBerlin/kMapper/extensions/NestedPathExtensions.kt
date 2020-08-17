@@ -8,7 +8,7 @@ import de.kotlinBerlin.kMapper.WritePath
 import de.kotlinBerlin.kMapper.internal.BasicReadPath
 import de.kotlinBerlin.kMapper.internal.BasicReadWritePath
 import de.kotlinBerlin.kMapper.internal.BasicWritePath
-import de.kotlinBerlin.kMapper.toReadPath
+
 import kotlin.jvm.JvmName
 import kotlin.reflect.*
 
@@ -22,7 +22,7 @@ operator fun <S, V, V1> ReadPath<S, V>.get(subPath: WritePath<V, V1>): WritePath
     BasicWritePath("${this.name}.${subPath.name}") { target, value -> subPath(this(target), value) }
 
 //Nested Paths with Functions
-operator fun <S, V, V1, V2> ((S) -> V).get(subPath: ReadWritePath<V, V1, V2>): ReadWritePath<S, V1, V2> = toReadPath()[subPath]
+operator fun <S, V, V1, V2> ((S) -> V).get(subPath: ReadWritePath<V, V1, V2>): ReadWritePath<S, V1, V2> = path[subPath]
 
 operator fun <S, V, V1> ((S) -> V).get(subPath: ReadPath<V, V1>): ReadPath<S, V1> = BasicReadPath("${this.name}.${subPath.name}") { subPath(this(it)) }
 operator fun <S, V, V1> ((S) -> V).get(subPath: (V) -> V1): ReadPath<S, V1> = BasicReadPath("${this.name}.${subPath.name}") { subPath(this(it)) }
@@ -38,7 +38,7 @@ operator fun <S, V, V1> ReadPath<S, V>.get(subPath: (V, V1) -> Unit): WritePath<
     BasicWritePath("${this.name}.${subPath.name}") { target, value -> subPath(this(target), value) }
 
 //Nested Paths with Properties
-operator fun <S, V, V1, V2> KProperty1<S, V>.get(subPath: ReadWritePath<V, V1, V2>): ReadWritePath<S, V1, V2> = toReadPath()[subPath]
+operator fun <S, V, V1, V2> KProperty1<S, V>.get(subPath: ReadWritePath<V, V1, V2>): ReadWritePath<S, V1, V2> = path[subPath]
 
 operator fun <S, V, V1> KProperty1<S, V>.get(subPath: ReadPath<V, V1>): ReadPath<S, V1> = BasicReadPath("${this.name}.${subPath.name}") { subPath(this(it)) }
 operator fun <S, V, V1> KProperty1<S, V>.get(subPath: KProperty1<V, V1>): ReadPath<S, V1> = BasicReadPath("${this.name}.${subPath.name}") { subPath(this(it)) }

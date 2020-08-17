@@ -5,7 +5,7 @@ package de.kotlinBerlin.kMapper.extensions
 
 import de.kotlinBerlin.kMapper.*
 import de.kotlinBerlin.kMapper.internal.IgnoreMappingException
-import de.kotlinBerlin.kMapper.toReadWritePath
+
 import kotlin.jvm.JvmName
 import kotlin.reflect.KMutableProperty1
 
@@ -23,15 +23,15 @@ fun <S, V : Any> WritePath<S, V>.writeNotNull(exceptionBlock: () -> Nothing): Wr
 
 //Property
 
-fun <S, V : Any> KMutableProperty1<S, V>.writeNotNull(): ReadWritePath<S, V, V?> = toReadWritePath().writeNotNull()
+fun <S, V : Any> KMutableProperty1<S, V>.writeNotNull(): ReadWritePath<S, V, V?> = path.writeNotNull()
 
-fun <S, V : Any> KMutableProperty1<S, V>.writeNotNull(exceptionBlock: () -> Nothing): ReadWritePath<S, V, V?> = toReadWritePath().writeNotNull(exceptionBlock)
+fun <S, V : Any> KMutableProperty1<S, V>.writeNotNull(exceptionBlock: () -> Nothing): ReadWritePath<S, V, V?> = path.writeNotNull(exceptionBlock)
 
 //Function
 
-fun <S, V : Any> ((S, V) -> Unit).writeNotNull(): WritePath<S, V?> = toWritePath().writeNotNull()
+fun <S, V : Any> ((S, V) -> Unit).writeNotNull(): WritePath<S, V?> = path.writeNotNull()
 
-fun <S, V : Any> ((S, V) -> Unit).readNotNull(exceptionBlock: () -> Nothing): WritePath<S, V?> = toWritePath().writeNotNull(exceptionBlock)
+fun <S, V : Any> ((S, V) -> Unit).readNotNull(exceptionBlock: () -> Nothing): WritePath<S, V?> = path.writeNotNull(exceptionBlock)
 
 //Map when not null
 
@@ -43,11 +43,11 @@ fun <S, V : Any> WritePath<S, V>.writeIfPresent(): WritePath<S, V?> = writeNotNu
 
 //Property
 
-fun <S, V : Any> KMutableProperty1<S, V>.writeIfPresent(): ReadWritePath<S, V, V?> = toReadWritePath().writeIfPresent()
+fun <S, V : Any> KMutableProperty1<S, V>.writeIfPresent(): ReadWritePath<S, V, V?> = path.writeIfPresent()
 
 //Function
 
-fun <S, V : Any> ((S, V) -> Unit).writeIfPresent(): WritePath<S, V?> = toWritePath().writeIfPresent()
+fun <S, V : Any> ((S, V) -> Unit).writeIfPresent(): WritePath<S, V?> = path.writeIfPresent()
 
 //Default value
 
@@ -63,15 +63,15 @@ fun <S, V : Any> WritePath<S, V>.writeWithDefault(aDefaultBlock: () -> V): Write
 
 //Property
 
-fun <S, V : Any> KMutableProperty1<S, V>.writeWithDefault(aDefault: V): ReadWritePath<S, V, V?> = toReadWritePath().writeWithDefault(aDefault)
+fun <S, V : Any> KMutableProperty1<S, V>.writeWithDefault(aDefault: V): ReadWritePath<S, V, V?> = path.writeWithDefault(aDefault)
 
-fun <S, V : Any> KMutableProperty1<S, V>.writeWithDefault(aDefaultBlock: () -> V): ReadWritePath<S, V, V?> = toReadWritePath().writeWithDefault(aDefaultBlock)
+fun <S, V : Any> KMutableProperty1<S, V>.writeWithDefault(aDefaultBlock: () -> V): ReadWritePath<S, V, V?> = path.writeWithDefault(aDefaultBlock)
 
 //Function
 
-fun <S, V : Any> ((S, V) -> Unit).writeWithDefault(aDefault: V): WritePath<S, V?> = toWritePath().writeWithDefault(aDefault)
+fun <S, V : Any> ((S, V) -> Unit).writeWithDefault(aDefault: V): WritePath<S, V?> = path.writeWithDefault(aDefault)
 
-fun <S, V : Any> ((S, V) -> Unit).writeWithDefault(aDefaultBlock: () -> V): WritePath<S, V?> = toWritePath().writeWithDefault(aDefaultBlock)
+fun <S, V : Any> ((S, V) -> Unit).writeWithDefault(aDefaultBlock: () -> V): WritePath<S, V?> = path.writeWithDefault(aDefaultBlock)
 
 //String
 
@@ -87,17 +87,17 @@ fun <S> WritePath<S, String?>.writeFromAny(): WritePath<S, Any?> = writeConverte
 
 //Property
 
-fun <S> KMutableProperty1<S, String>.writeFromAny(): ReadWritePath<S, String, Any> = toReadWritePath().writeFromAny()
+fun <S> KMutableProperty1<S, String>.writeFromAny(): ReadWritePath<S, String, Any> = path.writeFromAny()
 
 @JvmName("writeFromNullableAny")
-fun <S> KMutableProperty1<S, String?>.writeFromAny(): ReadWritePath<S, String?, Any?> = toReadWritePath().writeFromAny()
+fun <S> KMutableProperty1<S, String?>.writeFromAny(): ReadWritePath<S, String?, Any?> = path.writeFromAny()
 
 //Function
 
-fun <S> ((S, String) -> Unit).writeFromAny(): WritePath<S, Any> = toWritePath().writeFromAny()
+fun <S> ((S, String) -> Unit).writeFromAny(): WritePath<S, Any> = path.writeFromAny()
 
 @JvmName("writeFromNullableAny")
-fun <S> ((S, String?) -> Unit).writeFromAny(): WritePath<S, Any?> = toWritePath().writeFromAny()
+fun <S> ((S, String?) -> Unit).writeFromAny(): WritePath<S, Any?> = path.writeFromAny()
 
 //Double
 
@@ -142,42 +142,42 @@ fun <S> WritePath<S, Double?>.writeFromNullableStrOrNull(): WritePath<S, String?
 //Property
 
 @JvmName("writeDoubleFromNum")
-fun <S> KMutableProperty1<S, Double>.writeFromNum(): ReadWritePath<S, Double, Number> = toReadWritePath().writeFromNum()
+fun <S> KMutableProperty1<S, Double>.writeFromNum(): ReadWritePath<S, Double, Number> = path.writeFromNum()
 
 @JvmName("writeDoubleFromNullableNum")
-fun <S> KMutableProperty1<S, Double?>.writeFromNum(): ReadWritePath<S, Double?, Number?> = toReadWritePath().writeFromNum()
+fun <S> KMutableProperty1<S, Double?>.writeFromNum(): ReadWritePath<S, Double?, Number?> = path.writeFromNum()
 
 @JvmName("writeDoubleFromStr")
-fun <S> KMutableProperty1<S, Double>.writeFromStr(): ReadWritePath<S, Double, String> = toReadWritePath().writeFromStr()
+fun <S> KMutableProperty1<S, Double>.writeFromStr(): ReadWritePath<S, Double, String> = path.writeFromStr()
 
 @JvmName("writeDoubleFromStrOrNull")
-fun <S> KMutableProperty1<S, Double?>.writeFromStrOrNull(): ReadWritePath<S, Double?, String> = toReadWritePath().writeFromStrOrNull()
+fun <S> KMutableProperty1<S, Double?>.writeFromStrOrNull(): ReadWritePath<S, Double?, String> = path.writeFromStrOrNull()
 
 @JvmName("writeDoubleFromNullableStr")
-fun <S> KMutableProperty1<S, Double?>.writeFromStr(): ReadWritePath<S, Double?, String?> = toReadWritePath().writeFromStr()
+fun <S> KMutableProperty1<S, Double?>.writeFromStr(): ReadWritePath<S, Double?, String?> = path.writeFromStr()
 
 @JvmName("writeDoubleFromNullableStrOrNull")
-fun <S> KMutableProperty1<S, Double?>.writeFromNullableStrOrNull(): ReadWritePath<S, Double?, String?> = toReadWritePath().writeFromNullableStrOrNull()
+fun <S> KMutableProperty1<S, Double?>.writeFromNullableStrOrNull(): ReadWritePath<S, Double?, String?> = path.writeFromNullableStrOrNull()
 
 //Function
 
 @JvmName("writeDoubleFromNum")
-fun <S> ((S, Double) -> Unit).writeFromNum(): WritePath<S, Number> = toWritePath().writeFromNum()
+fun <S> ((S, Double) -> Unit).writeFromNum(): WritePath<S, Number> = path.writeFromNum()
 
 @JvmName("writeDoubleFromNullableNum")
-fun <S> ((S, Double?) -> Unit).writeFromNum(): WritePath<S, Number?> = toWritePath().writeFromNum()
+fun <S> ((S, Double?) -> Unit).writeFromNum(): WritePath<S, Number?> = path.writeFromNum()
 
 @JvmName("writeDoubleFromStr")
-fun <S> ((S, Double) -> Unit).writeFromStr(): WritePath<S, String> = toWritePath().writeFromStr()
+fun <S> ((S, Double) -> Unit).writeFromStr(): WritePath<S, String> = path.writeFromStr()
 
 @JvmName("writeDoubleFromStrOrNull")
-fun <S> ((S, Double?) -> Unit).writeFromStrOrNull(): WritePath<S, String> = toWritePath().writeFromStrOrNull()
+fun <S> ((S, Double?) -> Unit).writeFromStrOrNull(): WritePath<S, String> = path.writeFromStrOrNull()
 
 @JvmName("writeDoubleFromNullableStr")
-fun <S> ((S, Double?) -> Unit).writeFromStr(): WritePath<S, String?> = toWritePath().writeFromStr()
+fun <S> ((S, Double?) -> Unit).writeFromStr(): WritePath<S, String?> = path.writeFromStr()
 
 @JvmName("writeDoubleFromNullableStrOrNull")
-fun <S> ((S, Double?) -> Unit).writeFromNullableStrOrNull(): WritePath<S, String?> = toWritePath().writeFromNullableStrOrNull()
+fun <S> ((S, Double?) -> Unit).writeFromNullableStrOrNull(): WritePath<S, String?> = path.writeFromNullableStrOrNull()
 
 //Float
 
@@ -222,42 +222,42 @@ fun <S> WritePath<S, Float?>.writeFromNullableStrOrNull(): WritePath<S, String?>
 //Property
 
 @JvmName("writeFloatFromNum")
-fun <S> KMutableProperty1<S, Float>.writeFromNum(): ReadWritePath<S, Float, Number> = toReadWritePath().writeFromNum()
+fun <S> KMutableProperty1<S, Float>.writeFromNum(): ReadWritePath<S, Float, Number> = path.writeFromNum()
 
 @JvmName("writeFloatFromNullableNum")
-fun <S> KMutableProperty1<S, Float?>.writeFromNum(): ReadWritePath<S, Float?, Number?> = toReadWritePath().writeFromNum()
+fun <S> KMutableProperty1<S, Float?>.writeFromNum(): ReadWritePath<S, Float?, Number?> = path.writeFromNum()
 
 @JvmName("writeFloatFromStr")
-fun <S> KMutableProperty1<S, Float>.writeFromStr(): ReadWritePath<S, Float, String> = toReadWritePath().writeFromStr()
+fun <S> KMutableProperty1<S, Float>.writeFromStr(): ReadWritePath<S, Float, String> = path.writeFromStr()
 
 @JvmName("writeFloatFromStrOrNull")
-fun <S> KMutableProperty1<S, Float?>.writeFromStrOrNull(): ReadWritePath<S, Float?, String> = toReadWritePath().writeFromStrOrNull()
+fun <S> KMutableProperty1<S, Float?>.writeFromStrOrNull(): ReadWritePath<S, Float?, String> = path.writeFromStrOrNull()
 
 @JvmName("writeFloatFromNullableStr")
-fun <S> KMutableProperty1<S, Float?>.writeFromStr(): ReadWritePath<S, Float?, String?> = toReadWritePath().writeFromStr()
+fun <S> KMutableProperty1<S, Float?>.writeFromStr(): ReadWritePath<S, Float?, String?> = path.writeFromStr()
 
 @JvmName("writeFloatFromNullableStrOrNull")
-fun <S> KMutableProperty1<S, Float?>.writeFromNullableStrOrNull(): ReadWritePath<S, Float?, String?> = toReadWritePath().writeFromNullableStrOrNull()
+fun <S> KMutableProperty1<S, Float?>.writeFromNullableStrOrNull(): ReadWritePath<S, Float?, String?> = path.writeFromNullableStrOrNull()
 
 //Function
 
 @JvmName("writeFloatFromNum")
-fun <S> ((S, Float) -> Unit).writeFromNum(): WritePath<S, Number> = toWritePath().writeFromNum()
+fun <S> ((S, Float) -> Unit).writeFromNum(): WritePath<S, Number> = path.writeFromNum()
 
 @JvmName("writeFloatFromNullableNum")
-fun <S> ((S, Float?) -> Unit).writeFromNum(): WritePath<S, Number?> = toWritePath().writeFromNum()
+fun <S> ((S, Float?) -> Unit).writeFromNum(): WritePath<S, Number?> = path.writeFromNum()
 
 @JvmName("writeFloatFromStr")
-fun <S> ((S, Float) -> Unit).writeFromStr(): WritePath<S, String> = toWritePath().writeFromStr()
+fun <S> ((S, Float) -> Unit).writeFromStr(): WritePath<S, String> = path.writeFromStr()
 
 @JvmName("writeFloatFromStrOrNull")
-fun <S> ((S, Float?) -> Unit).writeFromStrOrNull(): WritePath<S, String> = toWritePath().writeFromStrOrNull()
+fun <S> ((S, Float?) -> Unit).writeFromStrOrNull(): WritePath<S, String> = path.writeFromStrOrNull()
 
 @JvmName("writeFloatFromNullableStr")
-fun <S> ((S, Float?) -> Unit).writeFromStr(): WritePath<S, String?> = toWritePath().writeFromStr()
+fun <S> ((S, Float?) -> Unit).writeFromStr(): WritePath<S, String?> = path.writeFromStr()
 
 @JvmName("writeFloatFromNullableStrOrNull")
-fun <S> ((S, Float?) -> Unit).writeFromNullableStrOrNull(): WritePath<S, String?> = toWritePath().writeFromNullableStrOrNull()
+fun <S> ((S, Float?) -> Unit).writeFromNullableStrOrNull(): WritePath<S, String?> = path.writeFromNullableStrOrNull()
 
 //Long
 
@@ -302,42 +302,42 @@ fun <S> WritePath<S, Long?>.writeFromNullableStrOrNull(): WritePath<S, String?> 
 //Property
 
 @JvmName("writeLongFromNum")
-fun <S> KMutableProperty1<S, Long>.writeFromNum(): ReadWritePath<S, Long, Number> = toReadWritePath().writeFromNum()
+fun <S> KMutableProperty1<S, Long>.writeFromNum(): ReadWritePath<S, Long, Number> = path.writeFromNum()
 
 @JvmName("writeLongFromNullableNum")
-fun <S> KMutableProperty1<S, Long?>.writeFromNum(): ReadWritePath<S, Long?, Number?> = toReadWritePath().writeFromNum()
+fun <S> KMutableProperty1<S, Long?>.writeFromNum(): ReadWritePath<S, Long?, Number?> = path.writeFromNum()
 
 @JvmName("writeLongFromStr")
-fun <S> KMutableProperty1<S, Long>.writeFromStr(): ReadWritePath<S, Long, String> = toReadWritePath().writeFromStr()
+fun <S> KMutableProperty1<S, Long>.writeFromStr(): ReadWritePath<S, Long, String> = path.writeFromStr()
 
 @JvmName("writeLongFromStrOrNull")
-fun <S> KMutableProperty1<S, Long?>.writeFromStrOrNull(): ReadWritePath<S, Long?, String> = toReadWritePath().writeFromStrOrNull()
+fun <S> KMutableProperty1<S, Long?>.writeFromStrOrNull(): ReadWritePath<S, Long?, String> = path.writeFromStrOrNull()
 
 @JvmName("writeLongFromNullableStr")
-fun <S> KMutableProperty1<S, Long?>.writeFromStr(): ReadWritePath<S, Long?, String?> = toReadWritePath().writeFromStr()
+fun <S> KMutableProperty1<S, Long?>.writeFromStr(): ReadWritePath<S, Long?, String?> = path.writeFromStr()
 
 @JvmName("writeLongFromNullableStrOrNull")
-fun <S> KMutableProperty1<S, Long?>.writeFromNullableStrOrNull(): ReadWritePath<S, Long?, String?> = toReadWritePath().writeFromNullableStrOrNull()
+fun <S> KMutableProperty1<S, Long?>.writeFromNullableStrOrNull(): ReadWritePath<S, Long?, String?> = path.writeFromNullableStrOrNull()
 
 //Function
 
 @JvmName("writeLongFromNum")
-fun <S> ((S, Long) -> Unit).writeFromNum(): WritePath<S, Number> = toWritePath().writeFromNum()
+fun <S> ((S, Long) -> Unit).writeFromNum(): WritePath<S, Number> = path.writeFromNum()
 
 @JvmName("writeLongFromNullableNum")
-fun <S> ((S, Long?) -> Unit).writeFromNum(): WritePath<S, Number?> = toWritePath().writeFromNum()
+fun <S> ((S, Long?) -> Unit).writeFromNum(): WritePath<S, Number?> = path.writeFromNum()
 
 @JvmName("writeLongFromStr")
-fun <S> ((S, Long) -> Unit).writeFromStr(): WritePath<S, String> = toWritePath().writeFromStr()
+fun <S> ((S, Long) -> Unit).writeFromStr(): WritePath<S, String> = path.writeFromStr()
 
 @JvmName("writeLongFromStrOrNull")
-fun <S> ((S, Long?) -> Unit).writeFromStrOrNull(): WritePath<S, String> = toWritePath().writeFromStrOrNull()
+fun <S> ((S, Long?) -> Unit).writeFromStrOrNull(): WritePath<S, String> = path.writeFromStrOrNull()
 
 @JvmName("writeLongFromNullableStr")
-fun <S> ((S, Long?) -> Unit).writeFromStr(): WritePath<S, String?> = toWritePath().writeFromStr()
+fun <S> ((S, Long?) -> Unit).writeFromStr(): WritePath<S, String?> = path.writeFromStr()
 
 @JvmName("writeLongFromNullableStrOrNull")
-fun <S> ((S, Long?) -> Unit).writeFromNullableStrOrNull(): WritePath<S, String?> = toWritePath().writeFromNullableStrOrNull()
+fun <S> ((S, Long?) -> Unit).writeFromNullableStrOrNull(): WritePath<S, String?> = path.writeFromNullableStrOrNull()
 
 //Int
 
@@ -382,42 +382,42 @@ fun <S> WritePath<S, Int?>.writeFromNullableStrOrNull(): WritePath<S, String?> =
 //Property
 
 @JvmName("writeIntFromNum")
-fun <S> KMutableProperty1<S, Int>.writeFromNum(): ReadWritePath<S, Int, Number> = toReadWritePath().writeFromNum()
+fun <S> KMutableProperty1<S, Int>.writeFromNum(): ReadWritePath<S, Int, Number> = path.writeFromNum()
 
 @JvmName("writeIntFromNullableNum")
-fun <S> KMutableProperty1<S, Int?>.writeFromNum(): ReadWritePath<S, Int?, Number?> = toReadWritePath().writeFromNum()
+fun <S> KMutableProperty1<S, Int?>.writeFromNum(): ReadWritePath<S, Int?, Number?> = path.writeFromNum()
 
 @JvmName("writeIntFromStr")
-fun <S> KMutableProperty1<S, Int>.writeFromStr(): ReadWritePath<S, Int, String> = toReadWritePath().writeFromStr()
+fun <S> KMutableProperty1<S, Int>.writeFromStr(): ReadWritePath<S, Int, String> = path.writeFromStr()
 
 @JvmName("writeIntFromStrOrNull")
-fun <S> KMutableProperty1<S, Int?>.writeFromStrOrNull(): ReadWritePath<S, Int?, String> = toReadWritePath().writeFromStrOrNull()
+fun <S> KMutableProperty1<S, Int?>.writeFromStrOrNull(): ReadWritePath<S, Int?, String> = path.writeFromStrOrNull()
 
 @JvmName("writeIntFromNullableStr")
-fun <S> KMutableProperty1<S, Int?>.writeFromStr(): ReadWritePath<S, Int?, String?> = toReadWritePath().writeFromStr()
+fun <S> KMutableProperty1<S, Int?>.writeFromStr(): ReadWritePath<S, Int?, String?> = path.writeFromStr()
 
 @JvmName("writeIntFromNullableStrOrNull")
-fun <S> KMutableProperty1<S, Int?>.writeFromNullableStrOrNull(): ReadWritePath<S, Int?, String?> = toReadWritePath().writeFromNullableStrOrNull()
+fun <S> KMutableProperty1<S, Int?>.writeFromNullableStrOrNull(): ReadWritePath<S, Int?, String?> = path.writeFromNullableStrOrNull()
 
 //Function
 
 @JvmName("writeIntFromNum")
-fun <S> ((S, Int) -> Unit).writeFromNum(): WritePath<S, Number> = toWritePath().writeFromNum()
+fun <S> ((S, Int) -> Unit).writeFromNum(): WritePath<S, Number> = path.writeFromNum()
 
 @JvmName("writeIntFromNullableNum")
-fun <S> ((S, Int?) -> Unit).writeFromNum(): WritePath<S, Number?> = toWritePath().writeFromNum()
+fun <S> ((S, Int?) -> Unit).writeFromNum(): WritePath<S, Number?> = path.writeFromNum()
 
 @JvmName("writeIntFromStr")
-fun <S> ((S, Int) -> Unit).writeFromStr(): WritePath<S, String> = toWritePath().writeFromStr()
+fun <S> ((S, Int) -> Unit).writeFromStr(): WritePath<S, String> = path.writeFromStr()
 
 @JvmName("writeIntFromStrOrNull")
-fun <S> ((S, Int?) -> Unit).writeFromStrOrNull(): WritePath<S, String> = toWritePath().writeFromStrOrNull()
+fun <S> ((S, Int?) -> Unit).writeFromStrOrNull(): WritePath<S, String> = path.writeFromStrOrNull()
 
 @JvmName("writeIntFromNullableStr")
-fun <S> ((S, Int?) -> Unit).writeFromStr(): WritePath<S, String?> = toWritePath().writeFromStr()
+fun <S> ((S, Int?) -> Unit).writeFromStr(): WritePath<S, String?> = path.writeFromStr()
 
 @JvmName("writeIntFromNullableStrOrNull")
-fun <S> ((S, Int?) -> Unit).writeFromNullableStrOrNull(): WritePath<S, String?> = toWritePath().writeFromNullableStrOrNull()
+fun <S> ((S, Int?) -> Unit).writeFromNullableStrOrNull(): WritePath<S, String?> = path.writeFromNullableStrOrNull()
 
 //Short
 
@@ -462,42 +462,42 @@ fun <S> WritePath<S, Short?>.writeFromNullableStrOrNull(): WritePath<S, String?>
 //Property
 
 @JvmName("writeShortFromNum")
-fun <S> KMutableProperty1<S, Short>.writeFromNum(): ReadWritePath<S, Short, Number> = toReadWritePath().writeFromNum()
+fun <S> KMutableProperty1<S, Short>.writeFromNum(): ReadWritePath<S, Short, Number> = path.writeFromNum()
 
 @JvmName("writeShortFromNullableNum")
-fun <S> KMutableProperty1<S, Short?>.writeFromNum(): ReadWritePath<S, Short?, Number?> = toReadWritePath().writeFromNum()
+fun <S> KMutableProperty1<S, Short?>.writeFromNum(): ReadWritePath<S, Short?, Number?> = path.writeFromNum()
 
 @JvmName("writeShortFromStr")
-fun <S> KMutableProperty1<S, Short>.writeFromStr(): ReadWritePath<S, Short, String> = toReadWritePath().writeFromStr()
+fun <S> KMutableProperty1<S, Short>.writeFromStr(): ReadWritePath<S, Short, String> = path.writeFromStr()
 
 @JvmName("writeShortFromStrOrNull")
-fun <S> KMutableProperty1<S, Short?>.writeFromStrOrNull(): ReadWritePath<S, Short?, String> = toReadWritePath().writeFromStrOrNull()
+fun <S> KMutableProperty1<S, Short?>.writeFromStrOrNull(): ReadWritePath<S, Short?, String> = path.writeFromStrOrNull()
 
 @JvmName("writeShortFromNullableStr")
-fun <S> KMutableProperty1<S, Short?>.writeFromStr(): ReadWritePath<S, Short?, String?> = toReadWritePath().writeFromStr()
+fun <S> KMutableProperty1<S, Short?>.writeFromStr(): ReadWritePath<S, Short?, String?> = path.writeFromStr()
 
 @JvmName("writeShortFromNullableStrOrNull")
-fun <S> KMutableProperty1<S, Short?>.writeFromNullableStrOrNull(): ReadWritePath<S, Short?, String?> = toReadWritePath().writeFromNullableStrOrNull()
+fun <S> KMutableProperty1<S, Short?>.writeFromNullableStrOrNull(): ReadWritePath<S, Short?, String?> = path.writeFromNullableStrOrNull()
 
 //Function
 
 @JvmName("writeShortFromNum")
-fun <S> ((S, Short) -> Unit).writeFromNum(): WritePath<S, Number> = toWritePath().writeFromNum()
+fun <S> ((S, Short) -> Unit).writeFromNum(): WritePath<S, Number> = path.writeFromNum()
 
 @JvmName("writeShortFromNullableNum")
-fun <S> ((S, Short?) -> Unit).writeFromNum(): WritePath<S, Number?> = toWritePath().writeFromNum()
+fun <S> ((S, Short?) -> Unit).writeFromNum(): WritePath<S, Number?> = path.writeFromNum()
 
 @JvmName("writeShortFromStr")
-fun <S> ((S, Short) -> Unit).writeFromStr(): WritePath<S, String> = toWritePath().writeFromStr()
+fun <S> ((S, Short) -> Unit).writeFromStr(): WritePath<S, String> = path.writeFromStr()
 
 @JvmName("writeShortFromStrOrNull")
-fun <S> ((S, Short?) -> Unit).writeFromStrOrNull(): WritePath<S, String> = toWritePath().writeFromStrOrNull()
+fun <S> ((S, Short?) -> Unit).writeFromStrOrNull(): WritePath<S, String> = path.writeFromStrOrNull()
 
 @JvmName("writeShortFromNullableStr")
-fun <S> ((S, Short?) -> Unit).writeFromStr(): WritePath<S, String?> = toWritePath().writeFromStr()
+fun <S> ((S, Short?) -> Unit).writeFromStr(): WritePath<S, String?> = path.writeFromStr()
 
 @JvmName("writeShortFromNullableStrOrNull")
-fun <S> ((S, Short?) -> Unit).writeFromNullableStrOrNull(): WritePath<S, String?> = toWritePath().writeFromNullableStrOrNull()
+fun <S> ((S, Short?) -> Unit).writeFromNullableStrOrNull(): WritePath<S, String?> = path.writeFromNullableStrOrNull()
 
 //Byte
 
@@ -542,39 +542,39 @@ fun <S> WritePath<S, Byte?>.writeFromNullableStrOrNull(): WritePath<S, String?> 
 //Property
 
 @JvmName("writeByteFromNum")
-fun <S> KMutableProperty1<S, Byte>.writeFromNum(): ReadWritePath<S, Byte, Number> = toReadWritePath().writeFromNum()
+fun <S> KMutableProperty1<S, Byte>.writeFromNum(): ReadWritePath<S, Byte, Number> = path.writeFromNum()
 
 @JvmName("writeByteFromNullableNum")
-fun <S> KMutableProperty1<S, Byte?>.writeFromNum(): ReadWritePath<S, Byte?, Number?> = toReadWritePath().writeFromNum()
+fun <S> KMutableProperty1<S, Byte?>.writeFromNum(): ReadWritePath<S, Byte?, Number?> = path.writeFromNum()
 
 @JvmName("writeByteFromStr")
-fun <S> KMutableProperty1<S, Byte>.writeFromStr(): ReadWritePath<S, Byte, String> = toReadWritePath().writeFromStr()
+fun <S> KMutableProperty1<S, Byte>.writeFromStr(): ReadWritePath<S, Byte, String> = path.writeFromStr()
 
 @JvmName("writeByteFromStrOrNull")
-fun <S> KMutableProperty1<S, Byte?>.writeFromStrOrNull(): ReadWritePath<S, Byte?, String> = toReadWritePath().writeFromStrOrNull()
+fun <S> KMutableProperty1<S, Byte?>.writeFromStrOrNull(): ReadWritePath<S, Byte?, String> = path.writeFromStrOrNull()
 
 @JvmName("writeByteFromNullableStr")
-fun <S> KMutableProperty1<S, Byte?>.writeFromStr(): ReadWritePath<S, Byte?, String?> = toReadWritePath().writeFromStr()
+fun <S> KMutableProperty1<S, Byte?>.writeFromStr(): ReadWritePath<S, Byte?, String?> = path.writeFromStr()
 
 @JvmName("writeByteFromNullableStrOrNull")
-fun <S> KMutableProperty1<S, Byte?>.writeFromNullableStrOrNull(): ReadWritePath<S, Byte?, String?> = toReadWritePath().writeFromNullableStrOrNull()
+fun <S> KMutableProperty1<S, Byte?>.writeFromNullableStrOrNull(): ReadWritePath<S, Byte?, String?> = path.writeFromNullableStrOrNull()
 
 //Function
 
 @JvmName("writeByteFromNum")
-fun <S> ((S, Byte) -> Unit).writeFromNum(): WritePath<S, Number> = toWritePath().writeFromNum()
+fun <S> ((S, Byte) -> Unit).writeFromNum(): WritePath<S, Number> = path.writeFromNum()
 
 @JvmName("writeByteFromNullableNum")
-fun <S> ((S, Byte?) -> Unit).writeFromNum(): WritePath<S, Number?> = toWritePath().writeFromNum()
+fun <S> ((S, Byte?) -> Unit).writeFromNum(): WritePath<S, Number?> = path.writeFromNum()
 
 @JvmName("writeByteFromStr")
-fun <S> ((S, Byte) -> Unit).writeFromStr(): WritePath<S, String> = toWritePath().writeFromStr()
+fun <S> ((S, Byte) -> Unit).writeFromStr(): WritePath<S, String> = path.writeFromStr()
 
 @JvmName("writeByteFromStrOrNull")
-fun <S> ((S, Byte?) -> Unit).writeFromStrOrNull(): WritePath<S, String> = toWritePath().writeFromStrOrNull()
+fun <S> ((S, Byte?) -> Unit).writeFromStrOrNull(): WritePath<S, String> = path.writeFromStrOrNull()
 
 @JvmName("writeByteFromNullableStr")
-fun <S> ((S, Byte?) -> Unit).writeFromStr(): WritePath<S, String?> = toWritePath().writeFromStr()
+fun <S> ((S, Byte?) -> Unit).writeFromStr(): WritePath<S, String?> = path.writeFromStr()
 
 @JvmName("writeByteFromNullableStrOrNull")
-fun <S> ((S, Byte?) -> Unit).writeFromNullableStrOrNull(): WritePath<S, String?> = toWritePath().writeFromNullableStrOrNull()
+fun <S> ((S, Byte?) -> Unit).writeFromNullableStrOrNull(): WritePath<S, String?> = path.writeFromNullableStrOrNull()

@@ -4,7 +4,7 @@
 package de.kotlinBerlin.kMapper.extensions
 
 import de.kotlinBerlin.kMapper.ReadWritePath
-import de.kotlinBerlin.kMapper.toReadWritePath
+
 import kotlin.jvm.JvmName
 import kotlin.reflect.KMutableProperty1
 
@@ -19,9 +19,9 @@ fun <S, V : Any, V1 : Any> ReadWritePath<S, V?, V1>.notNull(exceptionBlock: () -
 
 //Property
 
-fun <S, V : Any> KMutableProperty1<S, V?>.notNull(): ReadWritePath<S, V, V?> = toReadWritePath().notNull()
+fun <S, V : Any> KMutableProperty1<S, V?>.notNull(): ReadWritePath<S, V, V?> = path.notNull()
 
-fun <S, V : Any> KMutableProperty1<S, V?>.notNull(exceptionBlock: () -> Nothing): ReadWritePath<S, V, V?> = toReadWritePath().notNull(exceptionBlock)
+fun <S, V : Any> KMutableProperty1<S, V?>.notNull(exceptionBlock: () -> Nothing): ReadWritePath<S, V, V?> = path.notNull(exceptionBlock)
 
 //Map when not null
 
@@ -31,7 +31,7 @@ fun <S, V : Any, V1 : Any> ReadWritePath<S, V?, V1>.ifPresent(): ReadWritePath<S
 
 //Property
 
-fun <S, V : Any> KMutableProperty1<S, V?>.ifPresent(): ReadWritePath<S, V, V?> = toReadWritePath().ifPresent()
+fun <S, V : Any> KMutableProperty1<S, V?>.ifPresent(): ReadWritePath<S, V, V?> = path.ifPresent()
 
 //Default value
 
@@ -52,10 +52,10 @@ fun <S, V : Any> ReadWritePath<S, V?, V>.withDefault(defaultBlock: () -> V): Rea
 //Property
 
 fun <S, V : Any> KMutableProperty1<S, V?>.withDefault(default: V): ReadWritePath<S, V, V?> =
-    toReadWritePath().withDefault(default)
+    path.withDefault(default)
 
 fun <S, V : Any> KMutableProperty1<S, V?>.withDefault(defaultBlock: () -> V): ReadWritePath<S, V, V?> =
-    toReadWritePath().withDefault(defaultBlock)
+    path.withDefault(defaultBlock)
 
 //Double
 
@@ -95,25 +95,25 @@ fun <S> ReadWritePath<S, String?, String?>.asDoubleOrNull(): ReadWritePath<S, Do
 
 @JvmName("doubleAsString")
 fun <S> KMutableProperty1<S, Double>.asString(): ReadWritePath<S, String, String> =
-    toReadWritePath().asString()
+    path.asString()
 
 fun <S> KMutableProperty1<S, String>.asDouble(): ReadWritePath<S, Double, Double> =
-    toReadWritePath().asDouble()
+    path.asDouble()
 
 @JvmName("doubleAsNullableString")
 fun <S> KMutableProperty1<S, Double?>.asString(): ReadWritePath<S, String?, String?> =
-    toReadWritePath().asString()
+    path.asString()
 
 @JvmName("asNullableDouble")
 fun <S> KMutableProperty1<S, String?>.asDouble(): ReadWritePath<S, Double?, Double?> =
-    toReadWritePath().asDouble()
+    path.asDouble()
 
 @JvmName("doubleAsNullableStringOrNull")
 fun <S> KMutableProperty1<S, Double?>.asStringOrNull(): ReadWritePath<S, String?, String?> =
-    toReadWritePath().asStringOrNull()
+    path.asStringOrNull()
 
 fun <S> KMutableProperty1<S, String?>.asDoubleOrNull(): ReadWritePath<S, Double?, Double?> =
-    toReadWritePath().asDoubleOrNull()
+    path.asDoubleOrNull()
 
 //Float
 
@@ -153,25 +153,25 @@ fun <S> ReadWritePath<S, String?, String?>.asFloatOrNull(): ReadWritePath<S, Flo
 
 @JvmName("floatAsString")
 fun <S> KMutableProperty1<S, Float>.asString(): ReadWritePath<S, String, String> =
-    toReadWritePath().asString()
+    path.asString()
 
 fun <S> KMutableProperty1<S, String>.asFloat(): ReadWritePath<S, Float, Float> =
-    toReadWritePath().asFloat()
+    path.asFloat()
 
 @JvmName("floatAsNullableString")
 fun <S> KMutableProperty1<S, Float?>.asString(): ReadWritePath<S, String?, String?> =
-    toReadWritePath().asString()
+    path.asString()
 
 @JvmName("asNullableFloat")
 fun <S> KMutableProperty1<S, String?>.asFloat(): ReadWritePath<S, Float?, Float?> =
-    toReadWritePath().asFloat()
+    path.asFloat()
 
 @JvmName("floatAsNullableStringOrNull")
 fun <S> KMutableProperty1<S, Float?>.asStringOrNull(): ReadWritePath<S, String?, String?> =
-    toReadWritePath().asStringOrNull()
+    path.asStringOrNull()
 
 fun <S> KMutableProperty1<S, String?>.asFloatOrNull(): ReadWritePath<S, Float?, Float?> =
-    toReadWritePath().asFloatOrNull()
+    path.asFloatOrNull()
 
 //Long
 
@@ -211,25 +211,25 @@ fun <S> ReadWritePath<S, String?, String?>.asLongOrNull(): ReadWritePath<S, Long
 
 @JvmName("longAsString")
 fun <S> KMutableProperty1<S, Long>.asString(): ReadWritePath<S, String, String> =
-    toReadWritePath().asString()
+    path.asString()
 
 fun <S> KMutableProperty1<S, String>.asLong(): ReadWritePath<S, Long, Long> =
-    toReadWritePath().asLong()
+    path.asLong()
 
 @JvmName("longAsNullableString")
 fun <S> KMutableProperty1<S, Long?>.asString(): ReadWritePath<S, String?, String?> =
-    toReadWritePath().asString()
+    path.asString()
 
 @JvmName("asNullableLong")
 fun <S> KMutableProperty1<S, String?>.asLong(): ReadWritePath<S, Long?, Long?> =
-    toReadWritePath().asLong()
+    path.asLong()
 
 @JvmName("longAsNullableStringOrNull")
 fun <S> KMutableProperty1<S, Long?>.asStringOrNull(): ReadWritePath<S, String?, String?> =
-    toReadWritePath().asStringOrNull()
+    path.asStringOrNull()
 
 fun <S> KMutableProperty1<S, String?>.asLongOrNull(): ReadWritePath<S, Long?, Long?> =
-    toReadWritePath().asLongOrNull()
+    path.asLongOrNull()
 
 //Int
 
@@ -269,25 +269,25 @@ fun <S> ReadWritePath<S, String?, String?>.asIntOrNull(): ReadWritePath<S, Int?,
 
 @JvmName("intAsString")
 fun <S> KMutableProperty1<S, Int>.asString(): ReadWritePath<S, String, String> =
-    toReadWritePath().asString()
+    path.asString()
 
 fun <S> KMutableProperty1<S, String>.asInt(): ReadWritePath<S, Int, Int> =
-    toReadWritePath().asInt()
+    path.asInt()
 
 @JvmName("intAsNullableString")
 fun <S> KMutableProperty1<S, Int?>.asString(): ReadWritePath<S, String?, String?> =
-    toReadWritePath().asString()
+    path.asString()
 
 @JvmName("asNullableInt")
 fun <S> KMutableProperty1<S, String?>.asInt(): ReadWritePath<S, Int?, Int?> =
-    toReadWritePath().asInt()
+    path.asInt()
 
 @JvmName("intAsNullableStringOrNull")
 fun <S> KMutableProperty1<S, Int?>.asStringOrNull(): ReadWritePath<S, String?, String?> =
-    toReadWritePath().asStringOrNull()
+    path.asStringOrNull()
 
 fun <S> KMutableProperty1<S, String?>.asIntOrNull(): ReadWritePath<S, Int?, Int?> =
-    toReadWritePath().asIntOrNull()
+    path.asIntOrNull()
 
 //Short
 
@@ -327,25 +327,25 @@ fun <S> ReadWritePath<S, String?, String?>.asShortOrNull(): ReadWritePath<S, Sho
 
 @JvmName("shortAsString")
 fun <S> KMutableProperty1<S, Short>.asString(): ReadWritePath<S, String, String> =
-    toReadWritePath().asString()
+    path.asString()
 
 fun <S> KMutableProperty1<S, String>.asShort(): ReadWritePath<S, Short, Short> =
-    toReadWritePath().asShort()
+    path.asShort()
 
 @JvmName("shortAsNullableString")
 fun <S> KMutableProperty1<S, Short?>.asString(): ReadWritePath<S, String?, String?> =
-    toReadWritePath().asString()
+    path.asString()
 
 @JvmName("asNullableShort")
 fun <S> KMutableProperty1<S, String?>.asShort(): ReadWritePath<S, Short?, Short?> =
-    toReadWritePath().asShort()
+    path.asShort()
 
 @JvmName("shortAsNullableStringOrNull")
 fun <S> KMutableProperty1<S, Short?>.asStringOrNull(): ReadWritePath<S, String?, String?> =
-    toReadWritePath().asStringOrNull()
+    path.asStringOrNull()
 
 fun <S> KMutableProperty1<S, String?>.asShortOrNull(): ReadWritePath<S, Short?, Short?> =
-    toReadWritePath().asShortOrNull()
+    path.asShortOrNull()
 
 //Byte
 
@@ -385,22 +385,22 @@ fun <S> ReadWritePath<S, String?, String?>.asByteOrNull(): ReadWritePath<S, Byte
 
 @JvmName("byteAsString")
 fun <S> KMutableProperty1<S, Byte>.asString(): ReadWritePath<S, String, String> =
-    toReadWritePath().asString()
+    path.asString()
 
 fun <S> KMutableProperty1<S, String>.asByte(): ReadWritePath<S, Byte, Byte> =
-    toReadWritePath().asByte()
+    path.asByte()
 
 @JvmName("byteAsNullableString")
 fun <S> KMutableProperty1<S, Byte?>.asString(): ReadWritePath<S, String?, String?> =
-    toReadWritePath().asString()
+    path.asString()
 
 @JvmName("asNullableByte")
 fun <S> KMutableProperty1<S, String?>.asByte(): ReadWritePath<S, Byte?, Byte?> =
-    toReadWritePath().asByte()
+    path.asByte()
 
 @JvmName("byteAsNullableStringOrNull")
 fun <S> KMutableProperty1<S, Byte?>.asStringOrNull(): ReadWritePath<S, String?, String?> =
-    toReadWritePath().asStringOrNull()
+    path.asStringOrNull()
 
 fun <S> KMutableProperty1<S, String?>.asByteOrNull(): ReadWritePath<S, Byte?, Byte?> =
-    toReadWritePath().asByteOrNull()
+    path.asByteOrNull()

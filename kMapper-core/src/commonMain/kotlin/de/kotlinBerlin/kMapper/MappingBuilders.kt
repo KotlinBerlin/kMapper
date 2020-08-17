@@ -3,9 +3,9 @@
 
 package de.kotlinBerlin.kMapper
 
-import de.kotlinBerlin.kMapper.extensions.name
-import de.kotlinBerlin.kMapper.internal.*
-import kotlin.jvm.JvmMultifileClass
+import de.kotlinBerlin.kMapper.extensions.path
+import de.kotlinBerlin.kMapper.internal.BasicBidirectionalMappingBuilder
+import de.kotlinBerlin.kMapper.internal.BasicMappingBuilder
 import kotlin.jvm.JvmName
 import kotlin.reflect.KMutableProperty1
 import kotlin.reflect.KType
@@ -60,17 +60,17 @@ interface MappingBuilder<S, T> {
     infix fun <V> ReadPath<S, V>.map(writePath: WritePath<T, V>)
 
     //Mappings by functions
-    infix fun <V> ((S) -> V).map(setter: (T, V) -> Unit): Unit = this.toReadPath() map setter.toWritePath()
+    infix fun <V> ((S) -> V).map(setter: (T, V) -> Unit): Unit = this.path map setter.path
 
     //Mappings from functions to properties
-    infix fun <V> ((S) -> V).map(setter: KMutableProperty1<T, V>): Unit = this.toReadPath() map setter.toWritePath()
+    infix fun <V> ((S) -> V).map(setter: KMutableProperty1<T, V>): Unit = this.path map setter.path
 
     //Mappings from properties to paths
-    infix fun <V> ReadPath<S, V>.map(setter: KMutableProperty1<T, V>): Unit = this map setter.toWritePath()
+    infix fun <V> ReadPath<S, V>.map(setter: KMutableProperty1<T, V>): Unit = this map setter.path
 
     //Mappings from functions to paths
-    infix fun <V> ReadPath<S, V>.map(setter: (T, V) -> Unit): Unit = this map setter.toWritePath()
-    infix fun <V> ((S) -> V).map(setter: WritePath<T, V>): Unit = this.toReadPath() map setter
+    infix fun <V> ReadPath<S, V>.map(setter: (T, V) -> Unit): Unit = this map setter.path
+    infix fun <V> ((S) -> V).map(setter: WritePath<T, V>): Unit = this.path map setter
 
 }
 
@@ -92,32 +92,27 @@ interface BidirectionalMappingBuilder<S, T> {
     infix fun <V> ReadPath<S, V>.mapToTarget(writePath: WritePath<T, V>)
 
     //Bidirectional mappings between Properties
-    infix fun <V> KMutableProperty1<S, V>.map(property: KMutableProperty1<T, V>) = this.toReadWritePath() map property.toReadWritePath()
+    infix fun <V> KMutableProperty1<S, V>.map(property: KMutableProperty1<T, V>) = this.path map property.path
 
     //Bidirectional mappings between Properties and paths
-    infix fun <V> ReadWritePath<S, V, V>.map(property: KMutableProperty1<T, V>): Unit = this map property.toReadWritePath()
-    infix fun <V> KMutableProperty1<S, V>.map(property: ReadWritePath<T, V, V>): Unit = this.toReadWritePath() map property
+    infix fun <V> ReadWritePath<S, V, V>.map(property: KMutableProperty1<T, V>): Unit = this map property.path
+    infix fun <V> KMutableProperty1<S, V>.map(property: ReadWritePath<T, V, V>): Unit = this.path map property
 
     //Unidirectional mappings by functions
-    infix fun <V> ((S, V) -> Unit).mapToSource(getter: (T) -> V): Unit = this.toWritePath() mapToSource getter.toReadPath()
-    infix fun <V> ((S) -> V).mapToTarget(setter: (T, V) -> Unit): Unit = this.toReadPath() mapToTarget setter.toWritePath()
+    infix fun <V> ((S, V) -> Unit).mapToSource(getter: (T) -> V): Unit = this.path mapToSource getter.path
+    infix fun <V> ((S) -> V).mapToTarget(setter: (T, V) -> Unit): Unit = this.path mapToTarget setter.path
 
     //Unidirectional mappings from Properties to functions and reverse
-    infix fun <V> KMutableProperty1<S, V>.mapToSource(getter: (T) -> V): Unit = this.toWritePath() mapToSource getter.toReadPath()
-    infix fun <V> ((S) -> V).mapToTarget(setter: KMutableProperty1<T, V>): Unit = this.toReadPath() mapToTarget setter.toWritePath()
+    infix fun <V> KMutableProperty1<S, V>.mapToSource(getter: (T) -> V): Unit = this.path mapToSource getter.path
+    infix fun <V> ((S) -> V).mapToTarget(setter: KMutableProperty1<T, V>): Unit = this.path mapToTarget setter.path
 
     //Unidirectional mappings from Properties to paths and reverse
-    infix fun <V> KMutableProperty1<S, V>.mapToSource(getter: ReadPath<T, V>): Unit = this.toWritePath() mapToSource getter
-    infix fun <V> ReadPath<S, V>.mapToTarget(setter: KMutableProperty1<T, V>): Unit = this mapToTarget setter.toWritePath()
+    infix fun <V> KMutableProperty1<S, V>.mapToSource(getter: ReadPath<T, V>): Unit = this.path mapToSource getter
+    infix fun <V> ReadPath<S, V>.mapToTarget(setter: KMutableProperty1<T, V>): Unit = this mapToTarget setter.path
 
     //Unidirectional mappings from functions to paths and reverse
-    infix fun <V> ((S, V) -> Unit).mapToSource(getter: ReadPath<T, V>): Unit = this.toWritePath() mapToSource getter
-    infix fun <V> WritePath<S, V>.mapToSource(getter: (T) -> V): Unit = this mapToSource getter.toReadPath()
-    infix fun <V> ReadPath<S, V>.mapToTarget(setter: (T, V) -> Unit): Unit = this mapToTarget setter.toWritePath()
-    infix fun <V> ((S) -> V).mapToTarget(setter: WritePath<T, V>): Unit = this.toReadPath() mapToTarget setter
+    infix fun <V> ((S, V) -> Unit).mapToSource(getter: ReadPath<T, V>): Unit = this.path mapToSource getter
+    infix fun <V> WritePath<S, V>.mapToSource(getter: (T) -> V): Unit = this mapToSource getter.path
+    infix fun <V> ReadPath<S, V>.mapToTarget(setter: (T, V) -> Unit): Unit = this mapToTarget setter.path
+    infix fun <V> ((S) -> V).mapToTarget(setter: WritePath<T, V>): Unit = this.path mapToTarget setter
 }
-
-internal fun <T, V> ((T) -> V).toReadPath() = BasicReadPath(this.name, this)
-internal fun <T, V> ((T, V) -> Unit).toWritePath() = BasicWritePath(this.name, this)
-internal fun <T, V> KMutableProperty1<T, V>.toWritePath() = BasicWritePath(this.name, this::set)
-internal fun <T, V> KMutableProperty1<T, V>.toReadWritePath() = BasicReadWritePath(this.name, this, this::set)

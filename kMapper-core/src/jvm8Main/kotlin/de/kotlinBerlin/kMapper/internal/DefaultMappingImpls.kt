@@ -3,7 +3,6 @@ package de.kotlinBerlin.kMapper.internal
 import de.kotlinBerlin.kMapper.*
 import de.kotlinBerlin.kMapper.extensions.path
 import de.kotlinBerlin.kMapper.extensions.readConverted
-import de.kotlinBerlin.kMapper.extensions.wPath
 import kotlin.reflect.*
 import kotlin.reflect.full.isSubtypeOf
 import kotlin.reflect.full.isSupertypeOf
@@ -79,10 +78,10 @@ internal class BasicDefaultMappingConfig<S, T>(private val sourceType: KType, pr
                     val tempTargetType = targetProp.returnType
 
                     if (tempSourceType == tempTargetType) {
-                        sourceProp.path to targetProp.wPath
+                        sourceProp.path to targetProp.path
                     } else {
                         (globalMappings[tempSourceType to tempTargetType] ?: mappingResolver(tempSourceType, tempTargetType))?.let { converter ->
-                            sourceProp.path.readConverted(converter as Mapping<Any?, Any?>) to targetProp.wPath
+                            sourceProp.path.readConverted(converter as Mapping<Any?, Any?>) to targetProp.path
                         }
                     }
                 }
@@ -195,7 +194,7 @@ internal class BasicDefaultBidirectionalMappingConfig<S, T>(private val sourceTy
 
     @ExperimentalStdlibApi
     @Suppress("UNCHECKED_CAST")
-    fun buildMappings(): Pair<Map<ReadPath<S, *>, WritePath<T, Nothing>>, Map<WritePath<S, Nothing>, ReadPath<T, *>>> {
+    fun buildMappings(): Pair<Map<ReadPath<S, Any?>, ReadWritePath<T, Any?, Nothing>>, Map<ReadWritePath<S, Any?, Nothing>, ReadPath<T, Any?>>> {
         sourceClass = sourceType.classifier as? KClass<*> ?: throw IllegalArgumentException("Unable to perform default mapping!")
         targetClass = targetType.classifier as? KClass<*> ?: throw IllegalArgumentException("Unable to perform default mapping!")
 
@@ -208,10 +207,10 @@ internal class BasicDefaultBidirectionalMappingConfig<S, T>(private val sourceTy
                 tempTargetProp?.let { targetProp ->
                     val tempTargetType = targetProp.returnType
                     if (tempSourceType == tempTargetType) {
-                        sourceProp.path to targetProp.wPath
+                        sourceProp.path to targetProp.path
                     } else {
                         (globalMappings[tempSourceType to tempTargetType] ?: mappingResolver(tempSourceType, tempTargetType))?.let { converter ->
-                            sourceProp.path.readConverted { (converter as Mapping<Any?, Any?>).map(it) } to targetProp.wPath
+                            sourceProp.path.readConverted { (converter as Mapping<Any?, Any?>).map(it) } to targetProp.path
                         }
                     }
                 }
@@ -226,10 +225,10 @@ internal class BasicDefaultBidirectionalMappingConfig<S, T>(private val sourceTy
                 tempSourceProp?.let { sourceProp ->
                     val tempSourceType = sourceProp.returnType
                     if (tempTargetType == tempSourceType) {
-                        sourceProp.wPath to targetProp.path
+                        sourceProp.path to targetProp.path
                     } else {
                         globalMappings[tempTargetType to tempSourceType]?.let { converter ->
-                            sourceProp.wPath to targetProp.path.readConverted { (converter as Mapping<Any?, Any?>).map(it) }
+                            sourceProp.path to targetProp.path.readConverted { (converter as Mapping<Any?, Any?>).map(it) }
                         }
                     }
                 }

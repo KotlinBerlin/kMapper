@@ -3,9 +3,9 @@
 
 package de.kotlinBerlin.kMapper.extensions
 
-import de.kotlinBerlin.kMapper.*
+import de.kotlinBerlin.kMapper.ReadPath
+import de.kotlinBerlin.kMapper.ReadWritePath
 import de.kotlinBerlin.kMapper.internal.IgnoreMappingException
-import de.kotlinBerlin.kMapper.toReadWritePath
 import kotlin.jvm.JvmName
 import kotlin.reflect.KMutableProperty1
 
@@ -15,23 +15,25 @@ import kotlin.reflect.KMutableProperty1
 
 fun <S, V : Any, V1> ReadWritePath<S, V?, V1>.readNotNull(): ReadWritePath<S, V, V1> = readConverted { it!! }
 
-fun <S, V : Any, V1> ReadWritePath<S, V?, V1>.readNotNull(exceptionBlock: () -> Nothing): ReadWritePath<S, V, V1> = readConverted { it ?: exceptionBlock() }
+inline fun <S, V : Any, V1> ReadWritePath<S, V?, V1>.readNotNull(crossinline exceptionBlock: () -> Nothing): ReadWritePath<S, V, V1> =
+    readConverted { it ?: exceptionBlock() }
 
 fun <S, V : Any> ReadPath<S, V?>.readNotNull(): ReadPath<S, V> = readConverted { it!! }
 
-fun <S, V : Any> ReadPath<S, V?>.readNotNull(exceptionBlock: () -> Nothing): ReadPath<S, V> = readConverted { it ?: exceptionBlock() }
+inline fun <S, V : Any> ReadPath<S, V?>.readNotNull(crossinline exceptionBlock: () -> Nothing): ReadPath<S, V> = readConverted { it ?: exceptionBlock() }
 
 //Property
 
-fun <S, V : Any> KMutableProperty1<S, V?>.readNotNull(): ReadWritePath<S, V, V> = toReadWritePath().readNotNull()
+fun <S, V : Any> KMutableProperty1<S, V?>.readNotNull(): ReadWritePath<S, V, V> = path.readNotNull()
 
-fun <S, V : Any> KMutableProperty1<S, V?>.readNotNull(exceptionBlock: () -> Nothing): ReadWritePath<S, V, V> = toReadWritePath().readNotNull(exceptionBlock)
+inline fun <S, V : Any> KMutableProperty1<S, V?>.readNotNull(crossinline exceptionBlock: () -> Nothing): ReadWritePath<S, V, V> =
+    path.readNotNull(exceptionBlock)
 
 //Function
 
-fun <S, V : Any> ((S) -> V?).readNotNull(): ReadPath<S, V> = toReadPath().readNotNull()
+fun <S, V : Any> ((S) -> V?).readNotNull(): ReadPath<S, V> = path.readNotNull()
 
-fun <S, V : Any> ((S) -> V?).readNotNull(exceptionBlock: () -> Nothing): ReadPath<S, V> = toReadPath().readNotNull(exceptionBlock)
+inline fun <S, V : Any> ((S) -> V?).readNotNull(crossinline exceptionBlock: () -> Nothing): ReadPath<S, V> = path.readNotNull(exceptionBlock)
 
 //Map when not null
 
@@ -43,11 +45,11 @@ fun <S, V : Any> ReadPath<S, V?>.readIfPresent(): ReadPath<S, V> = readNotNull {
 
 //Property
 
-fun <S, V : Any> KMutableProperty1<S, V?>.readIfPresent(): ReadWritePath<S, V, V> = toReadWritePath().readIfPresent()
+fun <S, V : Any> KMutableProperty1<S, V?>.readIfPresent(): ReadWritePath<S, V, V> = path.readIfPresent()
 
 //Function
 
-fun <S, V : Any> ((S) -> V?).readIfPresent(): ReadPath<S, V> = toReadPath().readIfPresent()
+fun <S, V : Any> ((S) -> V?).readIfPresent(): ReadPath<S, V> = path.readIfPresent()
 
 
 //Default value
@@ -56,23 +58,25 @@ fun <S, V : Any> ((S) -> V?).readIfPresent(): ReadPath<S, V> = toReadPath().read
 
 fun <S, V : Any, V1> ReadWritePath<S, V?, V1>.readWithDefault(aDefault: V): ReadWritePath<S, V, V1> = readConverted { it ?: aDefault }
 
-fun <S, V : Any, V1> ReadWritePath<S, V?, V1>.readWithDefault(aDefaultBlock: () -> V): ReadWritePath<S, V, V1> = readConverted { it ?: aDefaultBlock() }
+inline fun <S, V : Any, V1> ReadWritePath<S, V?, V1>.readWithDefault(crossinline aDefaultBlock: () -> V): ReadWritePath<S, V, V1> =
+    readConverted { it ?: aDefaultBlock() }
 
 fun <S, V : Any> ReadPath<S, V?>.readWithDefault(aDefault: V): ReadPath<S, V> = readConverted { it ?: aDefault }
 
-fun <S, V : Any> ReadPath<S, V?>.readWithDefault(aDefaultBlock: () -> V): ReadPath<S, V> = readConverted { it ?: aDefaultBlock() }
+inline fun <S, V : Any> ReadPath<S, V?>.readWithDefault(crossinline aDefaultBlock: () -> V): ReadPath<S, V> = readConverted { it ?: aDefaultBlock() }
 
 //Property
 
-fun <S, V : Any> KMutableProperty1<S, V?>.readWithDefault(aDefault: V): ReadWritePath<S, V, V> = toReadWritePath().readWithDefault(aDefault)
+fun <S, V : Any> KMutableProperty1<S, V?>.readWithDefault(aDefault: V): ReadWritePath<S, V, V> = path.readWithDefault(aDefault)
 
-fun <S, V : Any> KMutableProperty1<S, V?>.readWithDefault(aDefaultBlock: () -> V): ReadWritePath<S, V, V> = toReadWritePath().readWithDefault(aDefaultBlock)
+inline fun <S, V : Any> KMutableProperty1<S, V?>.readWithDefault(crossinline aDefaultBlock: () -> V): ReadWritePath<S, V, V> =
+    path.readWithDefault(aDefaultBlock)
 
 //Function
 
-fun <S, V : Any> ((S) -> V?).readWithDefault(aDefault: V): ReadPath<S, V> = toReadPath().readWithDefault(aDefault)
+fun <S, V : Any> ((S) -> V?).readWithDefault(aDefault: V): ReadPath<S, V> = path.readWithDefault(aDefault)
 
-fun <S, V : Any> ((S) -> V?).readWithDefault(aDefaultBlock: () -> V): ReadPath<S, V> = toReadPath().readWithDefault(aDefaultBlock)
+inline fun <S, V : Any> ((S) -> V?).readWithDefault(crossinline aDefaultBlock: () -> V): ReadPath<S, V> = path.readWithDefault(aDefaultBlock)
 
 //String
 
@@ -90,17 +94,17 @@ fun <S, V> ReadPath<S, V>.readAsString(): ReadPath<S, String?> = readConverted {
 
 //Property
 
-fun <S, V : Any> KMutableProperty1<S, V>.readAsString(): ReadWritePath<S, String, V> = toReadWritePath().readAsString()
+fun <S, V : Any> KMutableProperty1<S, V>.readAsString(): ReadWritePath<S, String, V> = path.readAsString()
 
 @JvmName("readAsNullableString")
-fun <S, V> KMutableProperty1<S, V?>.readAsString(): ReadWritePath<S, String?, V> = toReadWritePath().readAsString()
+fun <S, V> KMutableProperty1<S, V?>.readAsString(): ReadWritePath<S, String?, V> = path.readAsString()
 
 //Function
 
-fun <S, V : Any> ((S) -> V).readAsString(): ReadPath<S, String> = toReadPath().readAsString()
+fun <S, V : Any> ((S) -> V).readAsString(): ReadPath<S, String> = path.readAsString()
 
 @JvmName("readAsNullableString")
-fun <S, V> ((S) -> V).readAsString(): ReadPath<S, String?> = toReadPath().readAsString()
+fun <S, V> ((S) -> V).readAsString(): ReadPath<S, String?> = path.readAsString()
 
 //Double
 
@@ -143,40 +147,40 @@ fun <S> ReadPath<S, String?>.readAsDoubleOrNull(): ReadPath<S, Double?> = readCo
 //Property
 
 @JvmName("readNumAsDouble")
-fun <S> KMutableProperty1<S, Number>.readAsDouble(): ReadWritePath<S, Double, Number> = toReadWritePath().readAsDouble()
+fun <S> KMutableProperty1<S, Number>.readAsDouble(): ReadWritePath<S, Double, Number> = path.readAsDouble()
 
 @JvmName("readNumAsNullableDouble")
-fun <S> KMutableProperty1<S, Number?>.readAsDouble(): ReadWritePath<S, Double?, Number?> = toReadWritePath().readAsDouble()
+fun <S> KMutableProperty1<S, Number?>.readAsDouble(): ReadWritePath<S, Double?, Number?> = path.readAsDouble()
 
 @JvmName("readStrAsDouble")
-fun <S> KMutableProperty1<S, String>.readAsDouble(): ReadWritePath<S, Double, String> = toReadWritePath().readAsDouble()
+fun <S> KMutableProperty1<S, String>.readAsDouble(): ReadWritePath<S, Double, String> = path.readAsDouble()
 
-fun <S> KMutableProperty1<S, String>.readAsDoubleOrNull(): ReadWritePath<S, Double?, String> = toReadWritePath().readAsDoubleOrNull()
+fun <S> KMutableProperty1<S, String>.readAsDoubleOrNull(): ReadWritePath<S, Double?, String> = path.readAsDoubleOrNull()
 
 @JvmName("readStrAsNullableDouble")
-fun <S> KMutableProperty1<S, String?>.readAsDouble(): ReadWritePath<S, Double?, String?> = toReadWritePath().readAsDouble()
+fun <S> KMutableProperty1<S, String?>.readAsDouble(): ReadWritePath<S, Double?, String?> = path.readAsDouble()
 
 @JvmName("readStrAsNullableDoubleOrNull")
-fun <S> KMutableProperty1<S, String?>.readAsDoubleOrNull(): ReadWritePath<S, Double?, String?> = toReadWritePath().readAsDoubleOrNull()
+fun <S> KMutableProperty1<S, String?>.readAsDoubleOrNull(): ReadWritePath<S, Double?, String?> = path.readAsDoubleOrNull()
 
 //Function
 
 @JvmName("readNumAsDouble")
-fun <S> ((S) -> Number).readAsDouble(): ReadPath<S, Double> = toReadPath().readAsDouble()
+fun <S> ((S) -> Number).readAsDouble(): ReadPath<S, Double> = path.readAsDouble()
 
 @JvmName("readNumAsNullableDouble")
-fun <S> ((S) -> Number?).readAsDouble(): ReadPath<S, Double?> = toReadPath().readAsDouble()
+fun <S> ((S) -> Number?).readAsDouble(): ReadPath<S, Double?> = path.readAsDouble()
 
 @JvmName("readStrAsDouble")
-fun <S> ((S) -> String).readAsDouble(): ReadPath<S, Double> = toReadPath().readAsDouble()
+fun <S> ((S) -> String).readAsDouble(): ReadPath<S, Double> = path.readAsDouble()
 
-fun <S> ((S) -> String).readAsDoubleOrNull(): ReadPath<S, Double?> = toReadPath().readAsDoubleOrNull()
+fun <S> ((S) -> String).readAsDoubleOrNull(): ReadPath<S, Double?> = path.readAsDoubleOrNull()
 
 @JvmName("readStrAsNullableDouble")
-fun <S> ((S) -> String?).readAsDouble(): ReadPath<S, Double?> = toReadPath().readAsDouble()
+fun <S> ((S) -> String?).readAsDouble(): ReadPath<S, Double?> = path.readAsDouble()
 
 @JvmName("readStrAsNullableDoubleOrNull")
-fun <S> ((S) -> String?).readAsDoubleOrNull(): ReadPath<S, Double?> = toReadPath().readAsDoubleOrNull()
+fun <S> ((S) -> String?).readAsDoubleOrNull(): ReadPath<S, Double?> = path.readAsDoubleOrNull()
 
 //Float
 
@@ -219,40 +223,40 @@ fun <S> ReadPath<S, String?>.readAsFloatOrNull(): ReadPath<S, Float?> = readConv
 //Property
 
 @JvmName("readNumAsFloat")
-fun <S> KMutableProperty1<S, Number>.readAsFloat(): ReadWritePath<S, Float, Number> = toReadWritePath().readAsFloat()
+fun <S> KMutableProperty1<S, Number>.readAsFloat(): ReadWritePath<S, Float, Number> = path.readAsFloat()
 
 @JvmName("readNumAsNullableFloat")
-fun <S> KMutableProperty1<S, Number?>.readAsFloat(): ReadWritePath<S, Float?, Number?> = toReadWritePath().readAsFloat()
+fun <S> KMutableProperty1<S, Number?>.readAsFloat(): ReadWritePath<S, Float?, Number?> = path.readAsFloat()
 
 @JvmName("readStrAsFloat")
-fun <S> KMutableProperty1<S, String>.readAsFloat(): ReadWritePath<S, Float, String> = toReadWritePath().readAsFloat()
+fun <S> KMutableProperty1<S, String>.readAsFloat(): ReadWritePath<S, Float, String> = path.readAsFloat()
 
-fun <S> KMutableProperty1<S, String>.readAsFloatOrNull(): ReadWritePath<S, Float?, String> = toReadWritePath().readAsFloatOrNull()
+fun <S> KMutableProperty1<S, String>.readAsFloatOrNull(): ReadWritePath<S, Float?, String> = path.readAsFloatOrNull()
 
 @JvmName("readStrAsNullableFloat")
-fun <S> KMutableProperty1<S, String?>.readAsFloat(): ReadWritePath<S, Float?, String?> = toReadWritePath().readAsFloat()
+fun <S> KMutableProperty1<S, String?>.readAsFloat(): ReadWritePath<S, Float?, String?> = path.readAsFloat()
 
 @JvmName("readStrAsNullableFloatOrNull")
-fun <S> KMutableProperty1<S, String?>.readAsFloatOrNull(): ReadWritePath<S, Float?, String?> = toReadWritePath().readAsFloatOrNull()
+fun <S> KMutableProperty1<S, String?>.readAsFloatOrNull(): ReadWritePath<S, Float?, String?> = path.readAsFloatOrNull()
 
 //Function
 
 @JvmName("readNumAsFloat")
-fun <S> ((S) -> Number).readAsFloat(): ReadPath<S, Float> = toReadPath().readAsFloat()
+fun <S> ((S) -> Number).readAsFloat(): ReadPath<S, Float> = path.readAsFloat()
 
 @JvmName("readNumAsNullableFloat")
-fun <S> ((S) -> Number?).readAsFloat(): ReadPath<S, Float?> = toReadPath().readAsFloat()
+fun <S> ((S) -> Number?).readAsFloat(): ReadPath<S, Float?> = path.readAsFloat()
 
 @JvmName("readStrAsFloat")
-fun <S> ((S) -> String).readAsFloat(): ReadPath<S, Float> = toReadPath().readAsFloat()
+fun <S> ((S) -> String).readAsFloat(): ReadPath<S, Float> = path.readAsFloat()
 
-fun <S> ((S) -> String).readAsFloatOrNull(): ReadPath<S, Float?> = toReadPath().readAsFloatOrNull()
+fun <S> ((S) -> String).readAsFloatOrNull(): ReadPath<S, Float?> = path.readAsFloatOrNull()
 
 @JvmName("readStrAsNullableFloat")
-fun <S> ((S) -> String?).readAsFloat(): ReadPath<S, Float?> = toReadPath().readAsFloat()
+fun <S> ((S) -> String?).readAsFloat(): ReadPath<S, Float?> = path.readAsFloat()
 
 @JvmName("readStrAsNullableFloatOrNull")
-fun <S> ((S) -> String?).readAsFloatOrNull(): ReadPath<S, Float?> = toReadPath().readAsFloatOrNull()
+fun <S> ((S) -> String?).readAsFloatOrNull(): ReadPath<S, Float?> = path.readAsFloatOrNull()
 
 //Long
 
@@ -295,40 +299,40 @@ fun <S> ReadPath<S, String?>.readAsLongOrNull(): ReadPath<S, Long?> = readConver
 //Property
 
 @JvmName("readNumAsLong")
-fun <S> KMutableProperty1<S, Number>.readAsLong(): ReadWritePath<S, Long, Number> = toReadWritePath().readAsLong()
+fun <S> KMutableProperty1<S, Number>.readAsLong(): ReadWritePath<S, Long, Number> = path.readAsLong()
 
 @JvmName("readNumAsNullableLong")
-fun <S> KMutableProperty1<S, Number?>.readAsLong(): ReadWritePath<S, Long?, Number?> = toReadWritePath().readAsLong()
+fun <S> KMutableProperty1<S, Number?>.readAsLong(): ReadWritePath<S, Long?, Number?> = path.readAsLong()
 
 @JvmName("readStrAsLong")
-fun <S> KMutableProperty1<S, String>.readAsLong(): ReadWritePath<S, Long, String> = toReadWritePath().readAsLong()
+fun <S> KMutableProperty1<S, String>.readAsLong(): ReadWritePath<S, Long, String> = path.readAsLong()
 
-fun <S> KMutableProperty1<S, String>.readAsLongOrNull(): ReadWritePath<S, Long?, String> = toReadWritePath().readAsLongOrNull()
+fun <S> KMutableProperty1<S, String>.readAsLongOrNull(): ReadWritePath<S, Long?, String> = path.readAsLongOrNull()
 
 @JvmName("readStrAsNullableLong")
-fun <S> KMutableProperty1<S, String?>.readAsLong(): ReadWritePath<S, Long?, String?> = toReadWritePath().readAsLong()
+fun <S> KMutableProperty1<S, String?>.readAsLong(): ReadWritePath<S, Long?, String?> = path.readAsLong()
 
 @JvmName("readStrAsNullableLongOrNull")
-fun <S> KMutableProperty1<S, String?>.readAsLongOrNull(): ReadWritePath<S, Long?, String?> = toReadWritePath().readAsLongOrNull()
+fun <S> KMutableProperty1<S, String?>.readAsLongOrNull(): ReadWritePath<S, Long?, String?> = path.readAsLongOrNull()
 
 //Function
 
 @JvmName("readNumAsLong")
-fun <S> ((S) -> Number).readAsLong(): ReadPath<S, Long> = toReadPath().readAsLong()
+fun <S> ((S) -> Number).readAsLong(): ReadPath<S, Long> = path.readAsLong()
 
 @JvmName("readNumAsNullableLong")
-fun <S> ((S) -> Number?).readAsLong(): ReadPath<S, Long?> = toReadPath().readAsLong()
+fun <S> ((S) -> Number?).readAsLong(): ReadPath<S, Long?> = path.readAsLong()
 
 @JvmName("readStrAsLong")
-fun <S> ((S) -> String).readAsLong(): ReadPath<S, Long> = toReadPath().readAsLong()
+fun <S> ((S) -> String).readAsLong(): ReadPath<S, Long> = path.readAsLong()
 
-fun <S> ((S) -> String).readAsLongOrNull(): ReadPath<S, Long?> = toReadPath().readAsLongOrNull()
+fun <S> ((S) -> String).readAsLongOrNull(): ReadPath<S, Long?> = path.readAsLongOrNull()
 
 @JvmName("readStrAsNullableLong")
-fun <S> ((S) -> String?).readAsLong(): ReadPath<S, Long?> = toReadPath().readAsLong()
+fun <S> ((S) -> String?).readAsLong(): ReadPath<S, Long?> = path.readAsLong()
 
 @JvmName("readStrAsNullableLongOrNull")
-fun <S> ((S) -> String?).readAsLongOrNull(): ReadPath<S, Long?> = toReadPath().readAsLongOrNull()
+fun <S> ((S) -> String?).readAsLongOrNull(): ReadPath<S, Long?> = path.readAsLongOrNull()
 
 //Int
 
@@ -371,40 +375,40 @@ fun <S> ReadPath<S, String?>.readAsIntOrNull(): ReadPath<S, Int?> = readConverte
 //Property
 
 @JvmName("readNumAsInt")
-fun <S> KMutableProperty1<S, Number>.readAsInt(): ReadWritePath<S, Int, Number> = toReadWritePath().readAsInt()
+fun <S> KMutableProperty1<S, Number>.readAsInt(): ReadWritePath<S, Int, Number> = path.readAsInt()
 
 @JvmName("readNumAsNullableInt")
-fun <S> KMutableProperty1<S, Number?>.readAsInt(): ReadWritePath<S, Int?, Number?> = toReadWritePath().readAsInt()
+fun <S> KMutableProperty1<S, Number?>.readAsInt(): ReadWritePath<S, Int?, Number?> = path.readAsInt()
 
 @JvmName("readStrAsInt")
-fun <S> KMutableProperty1<S, String>.readAsInt(): ReadWritePath<S, Int, String> = toReadWritePath().readAsInt()
+fun <S> KMutableProperty1<S, String>.readAsInt(): ReadWritePath<S, Int, String> = path.readAsInt()
 
-fun <S> KMutableProperty1<S, String>.readAsIntOrNull(): ReadWritePath<S, Int?, String> = toReadWritePath().readAsIntOrNull()
+fun <S> KMutableProperty1<S, String>.readAsIntOrNull(): ReadWritePath<S, Int?, String> = path.readAsIntOrNull()
 
 @JvmName("readStrAsNullableInt")
-fun <S> KMutableProperty1<S, String?>.readAsInt(): ReadWritePath<S, Int?, String?> = toReadWritePath().readAsInt()
+fun <S> KMutableProperty1<S, String?>.readAsInt(): ReadWritePath<S, Int?, String?> = path.readAsInt()
 
 @JvmName("readStrAsNullableIntOrNull")
-fun <S> KMutableProperty1<S, String?>.readAsIntOrNull(): ReadWritePath<S, Int?, String?> = toReadWritePath().readAsIntOrNull()
+fun <S> KMutableProperty1<S, String?>.readAsIntOrNull(): ReadWritePath<S, Int?, String?> = path.readAsIntOrNull()
 
 //Function
 
 @JvmName("readNumAsInt")
-fun <S> ((S) -> Number).readAsInt(): ReadPath<S, Int> = toReadPath().readAsInt()
+fun <S> ((S) -> Number).readAsInt(): ReadPath<S, Int> = path.readAsInt()
 
 @JvmName("readNumAsNullableInt")
-fun <S> ((S) -> Number?).readAsInt(): ReadPath<S, Int?> = toReadPath().readAsInt()
+fun <S> ((S) -> Number?).readAsInt(): ReadPath<S, Int?> = path.readAsInt()
 
 @JvmName("readStrAsInt")
-fun <S> ((S) -> String).readAsInt(): ReadPath<S, Int> = toReadPath().readAsInt()
+fun <S> ((S) -> String).readAsInt(): ReadPath<S, Int> = path.readAsInt()
 
-fun <S> ((S) -> String).readAsIntOrNull(): ReadPath<S, Int?> = toReadPath().readAsIntOrNull()
+fun <S> ((S) -> String).readAsIntOrNull(): ReadPath<S, Int?> = path.readAsIntOrNull()
 
 @JvmName("readStrAsNullableInt")
-fun <S> ((S) -> String?).readAsInt(): ReadPath<S, Int?> = toReadPath().readAsInt()
+fun <S> ((S) -> String?).readAsInt(): ReadPath<S, Int?> = path.readAsInt()
 
 @JvmName("readStrAsNullableIntOrNull")
-fun <S> ((S) -> String?).readAsIntOrNull(): ReadPath<S, Int?> = toReadPath().readAsIntOrNull()
+fun <S> ((S) -> String?).readAsIntOrNull(): ReadPath<S, Int?> = path.readAsIntOrNull()
 
 //Short
 
@@ -447,40 +451,40 @@ fun <S> ReadPath<S, String?>.readAsShortOrNull(): ReadPath<S, Short?> = readConv
 //Property
 
 @JvmName("readNumAsShort")
-fun <S> KMutableProperty1<S, Number>.readAsShort(): ReadWritePath<S, Short, Number> = toReadWritePath().readAsShort()
+fun <S> KMutableProperty1<S, Number>.readAsShort(): ReadWritePath<S, Short, Number> = path.readAsShort()
 
 @JvmName("readNumAsNullableShort")
-fun <S> KMutableProperty1<S, Number?>.readAsShort(): ReadWritePath<S, Short?, Number?> = toReadWritePath().readAsShort()
+fun <S> KMutableProperty1<S, Number?>.readAsShort(): ReadWritePath<S, Short?, Number?> = path.readAsShort()
 
 @JvmName("readStrAsShort")
-fun <S> KMutableProperty1<S, String>.readAsShort(): ReadWritePath<S, Short, String> = toReadWritePath().readAsShort()
+fun <S> KMutableProperty1<S, String>.readAsShort(): ReadWritePath<S, Short, String> = path.readAsShort()
 
-fun <S> KMutableProperty1<S, String>.readAsShortOrNull(): ReadWritePath<S, Short?, String> = toReadWritePath().readAsShortOrNull()
+fun <S> KMutableProperty1<S, String>.readAsShortOrNull(): ReadWritePath<S, Short?, String> = path.readAsShortOrNull()
 
 @JvmName("readStrAsNullableShort")
-fun <S> KMutableProperty1<S, String?>.readAsShort(): ReadWritePath<S, Short?, String?> = toReadWritePath().readAsShort()
+fun <S> KMutableProperty1<S, String?>.readAsShort(): ReadWritePath<S, Short?, String?> = path.readAsShort()
 
 @JvmName("readStrAsNullableShortOrNull")
-fun <S> KMutableProperty1<S, String?>.readAsShortOrNull(): ReadWritePath<S, Short?, String?> = toReadWritePath().readAsShortOrNull()
+fun <S> KMutableProperty1<S, String?>.readAsShortOrNull(): ReadWritePath<S, Short?, String?> = path.readAsShortOrNull()
 
 //Function
 
 @JvmName("readNumAsShort")
-fun <S> ((S) -> Number).readAsShort(): ReadPath<S, Short> = toReadPath().readAsShort()
+fun <S> ((S) -> Number).readAsShort(): ReadPath<S, Short> = path.readAsShort()
 
 @JvmName("readNumAsNullableShort")
-fun <S> ((S) -> Number?).readAsShort(): ReadPath<S, Short?> = toReadPath().readAsShort()
+fun <S> ((S) -> Number?).readAsShort(): ReadPath<S, Short?> = path.readAsShort()
 
 @JvmName("readStrAsShort")
-fun <S> ((S) -> String).readAsShort(): ReadPath<S, Short> = toReadPath().readAsShort()
+fun <S> ((S) -> String).readAsShort(): ReadPath<S, Short> = path.readAsShort()
 
-fun <S> ((S) -> String).readAsShortOrNull(): ReadPath<S, Short?> = toReadPath().readAsShortOrNull()
+fun <S> ((S) -> String).readAsShortOrNull(): ReadPath<S, Short?> = path.readAsShortOrNull()
 
 @JvmName("readStrAsNullableShort")
-fun <S> ((S) -> String?).readAsShort(): ReadPath<S, Short?> = toReadPath().readAsShort()
+fun <S> ((S) -> String?).readAsShort(): ReadPath<S, Short?> = path.readAsShort()
 
 @JvmName("readStrAsNullableShortOrNull")
-fun <S> ((S) -> String?).readAsShortOrNull(): ReadPath<S, Short?> = toReadPath().readAsShortOrNull()
+fun <S> ((S) -> String?).readAsShortOrNull(): ReadPath<S, Short?> = path.readAsShortOrNull()
 
 //Byte
 
@@ -523,37 +527,37 @@ fun <S> ReadPath<S, String?>.readAsByteOrNull(): ReadPath<S, Byte?> = readConver
 //Property
 
 @JvmName("readNumAsByte")
-fun <S> KMutableProperty1<S, Number>.readAsByte(): ReadWritePath<S, Byte, Number> = toReadWritePath().readAsByte()
+fun <S> KMutableProperty1<S, Number>.readAsByte(): ReadWritePath<S, Byte, Number> = path.readAsByte()
 
 @JvmName("readNumAsNullableByte")
-fun <S> KMutableProperty1<S, Number?>.readAsByte(): ReadWritePath<S, Byte?, Number?> = toReadWritePath().readAsByte()
+fun <S> KMutableProperty1<S, Number?>.readAsByte(): ReadWritePath<S, Byte?, Number?> = path.readAsByte()
 
 @JvmName("readStrAsByte")
-fun <S> KMutableProperty1<S, String>.readAsByte(): ReadWritePath<S, Byte, String> = toReadWritePath().readAsByte()
+fun <S> KMutableProperty1<S, String>.readAsByte(): ReadWritePath<S, Byte, String> = path.readAsByte()
 
-fun <S> KMutableProperty1<S, String>.readAsByteOrNull(): ReadWritePath<S, Byte?, String> = toReadWritePath().readAsByteOrNull()
+fun <S> KMutableProperty1<S, String>.readAsByteOrNull(): ReadWritePath<S, Byte?, String> = path.readAsByteOrNull()
 
 @JvmName("readStrAsNullableByte")
-fun <S> KMutableProperty1<S, String?>.readAsByte(): ReadWritePath<S, Byte?, String?> = toReadWritePath().readAsByte()
+fun <S> KMutableProperty1<S, String?>.readAsByte(): ReadWritePath<S, Byte?, String?> = path.readAsByte()
 
 @JvmName("readStrAsNullableByteOrNull")
-fun <S> KMutableProperty1<S, String?>.readAsByteOrNull(): ReadWritePath<S, Byte?, String?> = toReadWritePath().readAsByteOrNull()
+fun <S> KMutableProperty1<S, String?>.readAsByteOrNull(): ReadWritePath<S, Byte?, String?> = path.readAsByteOrNull()
 
 //Function
 
 @JvmName("readNumAsByte")
-fun <S> ((S) -> Number).readAsByte(): ReadPath<S, Byte> = toReadPath().readAsByte()
+fun <S> ((S) -> Number).readAsByte(): ReadPath<S, Byte> = path.readAsByte()
 
 @JvmName("readNumAsNullableByte")
-fun <S> ((S) -> Number?).readAsByte(): ReadPath<S, Byte?> = toReadPath().readAsByte()
+fun <S> ((S) -> Number?).readAsByte(): ReadPath<S, Byte?> = path.readAsByte()
 
 @JvmName("readStrAsByte")
-fun <S> ((S) -> String).readAsByte(): ReadPath<S, Byte> = toReadPath().readAsByte()
+fun <S> ((S) -> String).readAsByte(): ReadPath<S, Byte> = path.readAsByte()
 
-fun <S> ((S) -> String).readAsByteOrNull(): ReadPath<S, Byte?> = toReadPath().readAsByteOrNull()
+fun <S> ((S) -> String).readAsByteOrNull(): ReadPath<S, Byte?> = path.readAsByteOrNull()
 
 @JvmName("readStrAsNullableByte")
-fun <S> ((S) -> String?).readAsByte(): ReadPath<S, Byte?> = toReadPath().readAsByte()
+fun <S> ((S) -> String?).readAsByte(): ReadPath<S, Byte?> = path.readAsByte()
 
 @JvmName("readStrAsNullableByteOrNull")
-fun <S> ((S) -> String?).readAsByteOrNull(): ReadPath<S, Byte?> = toReadPath().readAsByteOrNull()
+fun <S> ((S) -> String?).readAsByteOrNull(): ReadPath<S, Byte?> = path.readAsByteOrNull()
