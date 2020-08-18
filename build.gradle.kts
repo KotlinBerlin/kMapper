@@ -1,12 +1,12 @@
 import kotlinx.coroutines.*
 
 plugins {
-    kotlin("multiplatform") version "1.4.0-rc" apply false
+    kotlin("multiplatform") version "1.3.72" apply false
 }
 
 allprojects {
     group = "de.kotlin-berlin"
-    version = "1.0-RC"
+    version = "1.0-RC2"
 
     repositories {
         jcenter()
